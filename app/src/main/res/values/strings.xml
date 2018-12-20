@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BarsAround</string>
     <string name="places_api_key">AIzaSyCe41lFznZNN-J1ku4f2nzRSyC7SDTw9N0</string>
+    <string name="no_results">No results</string>
 </resources>
