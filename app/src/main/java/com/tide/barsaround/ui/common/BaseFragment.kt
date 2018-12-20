@@ -2,6 +2,7 @@ package com.tide.barsaround.ui.common
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.tide.barsaround.di.fragment.HasFragmentSubcomponentBuilders
 
 abstract class BaseFragment : Fragment() {
 

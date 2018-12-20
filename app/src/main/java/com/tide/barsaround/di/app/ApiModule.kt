@@ -1,5 +1,6 @@
 package com.tide.barsaround.di.app
 
+import com.tide.barsaround.data.remote.network.NearByApi
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -8,5 +9,5 @@ import retrofit2.Retrofit
 class ApiModule {
 
     @Provides
-    fun providePlacesApi(retrofit: Retrofit) = retrofit.create(PlacesApi::class.java)
+    fun provideNearByApi(retrofit: Retrofit) = retrofit.create(NearByApi::class.java)
 }

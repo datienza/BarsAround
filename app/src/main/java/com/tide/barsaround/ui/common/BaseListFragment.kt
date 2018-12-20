@@ -9,6 +9,8 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tide.barsaround.R
+import com.tide.barsaround.ui.helper.AnimationHelper
+import com.tide.barsaround.utils.UiConstants
 import kotlinx.android.synthetic.main.fragment_base_list.*
 import javax.inject.Inject
 
