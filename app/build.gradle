@@ -17,8 +17,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
-        // Enabling multidex support.
-        multiDexEnabled true
         buildConfigField "String", "API_ENDPOINT", api_endpoint
 
     }

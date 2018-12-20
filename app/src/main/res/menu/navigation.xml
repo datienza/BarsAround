@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_songs"
+        android:id="@+id/navigationBars"
         android:title="@string/bars"/>
 
     <item
-        android:id="@+id/navigation_albums"
+        android:id="@+id/navigationMap"
         android:title="@string/map"/>
 
 </menu>

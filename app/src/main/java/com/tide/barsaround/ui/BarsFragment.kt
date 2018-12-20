@@ -5,17 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.test.spacex.ui.adapter.products.BarsAdapter
 import com.tide.barsaround.R
 import com.tide.barsaround.data.model.Result
 import com.tide.barsaround.di.fragment.HasFragmentSubcomponentBuilders
+import com.tide.barsaround.presenters.BarsFragmentPresenter
 import com.tide.barsaround.ui.common.BaseListFragment
+import com.tide.barsaround.ui.common.SpacingItemDecoration
+import javax.inject.Inject
 
 class BarsFragment : BaseListFragment<BarsAdapter, Result, BarsAdapter.BarViewHolder>() {
+
+    @Inject
+    lateinit var presenter: BarsFragmentPresenter
 
     companion object {
         fun newInstance() = BarsFragment()
@@ -28,6 +31,7 @@ class BarsFragment : BaseListFragment<BarsAdapter, Result, BarsAdapter.BarViewHo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.loadData(true)
     }
 
     override fun injectMembers(hasFragmentSubcomponentBuilders: HasFragmentSubcomponentBuilders) {
@@ -49,12 +53,12 @@ class BarsFragment : BaseListFragment<BarsAdapter, Result, BarsAdapter.BarViewHo
         }
     }
 
-    override fun getItemDecoration(): RecyclerView.ItemDecoration {
-        val itemDecoration = DividerItemDecoration(context, LinearLayout.VERTICAL)
-        ResourcesCompat.getDrawable(resources, R.drawable.grey_line, null)?.let {
-            itemDecoration.setDrawable(it)
+    override fun getItemDecoration(): RecyclerView.ItemDecoration? {
+        return context?.let {
+            val verticalSpaceItemDecoration = SpacingItemDecoration(it)
+            verticalSpaceItemDecoration.setVerticalSpacing(R.dimen.grid_spacing_half)
+            verticalSpaceItemDecoration
         }
-        return itemDecoration
     }
 
     override fun setUpList() {

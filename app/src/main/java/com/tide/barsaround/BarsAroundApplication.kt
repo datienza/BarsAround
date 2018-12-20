@@ -15,7 +15,9 @@ import javax.inject.Provider
 class BarsAroundApplication : Application(), HasActivitySubcomponentBuilders {
 
     companion object {
-        fun get(context: Context) = context.applicationContext as HasActivitySubcomponentBuilders
+        fun get(context: Context): HasActivitySubcomponentBuilders {
+            return context.applicationContext as HasActivitySubcomponentBuilders
+        }
     }
 
     @Inject

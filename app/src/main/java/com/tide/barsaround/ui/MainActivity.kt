@@ -2,8 +2,8 @@ package com.tide.barsaround.ui
 
 import android.graphics.Typeface
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tide.barsaround.R
 import com.tide.barsaround.di.activity.HasActivitySubcomponentBuilders
 import com.tide.barsaround.di.fragment.FragmentComponentBuilder
@@ -23,18 +23,8 @@ class MainActivity : BaseActivity(), HasFragmentSubcomponentBuilders {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initBottomNavigation()
+        initBottomNavigation(R.id.navigationBars)
         initFragment()
-    }
-
-    private fun initBottomNavigation(selectedItemId: Int) {
-        bottomNavigationView.disableShiftMode()
-        bottomNavigationView.selectedItemId = 0
-        bottomNavigationView.setSelectedViewTextStyle(selectedItemId, Typeface.BOLD)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item: MenuItem ->
-            presenter.navigateToTab(bottomNavigationView.selectedItemId, item.itemId)
-            false
-        }
     }
 
     override fun createFragment() {
@@ -51,4 +41,23 @@ class MainActivity : BaseActivity(), HasFragmentSubcomponentBuilders {
 
     override fun getFragmentComponentBuilder(fragmentClass: Class<out Fragment>): FragmentComponentBuilder<*, *> =
         fragmentComponentBuilders[fragmentClass]!!.get()
+
+    private fun initBottomNavigation(selectedItemId: Int) {
+        bottomNavigationView.disableShiftMode()
+        bottomNavigationView.selectedItemId = 0
+        bottomNavigationView.setSelectedViewTextStyle(selectedItemId, Typeface.BOLD)
+        bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+    }
+
+    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.navigationBars -> {
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigationMap -> {
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
+    }
 }

@@ -12,6 +12,7 @@ import javax.inject.Singleton
     NetModule::class,
     RepositoryModule::class,
     RemoteDataModule::class,
+    SchedulersModule::class,
     ApiModule::class
 ])
 interface AppComponent {
