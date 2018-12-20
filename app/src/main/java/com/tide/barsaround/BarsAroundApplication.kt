@@ -5,6 +5,8 @@ import android.app.Application
 import android.content.Context
 import com.tide.barsaround.di.activity.ActivityComponentBuilder
 import com.tide.barsaround.di.activity.HasActivitySubcomponentBuilders
+import com.tide.barsaround.di.app.AppComponent
+import com.tide.barsaround.di.app.AppModule
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider

@@ -3,6 +3,8 @@ package com.tide.barsaround.di.app
 import android.app.Application
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import com.tide.barsaround.BuildConfig
+import com.tide.barsaround.utils.NetworkConstants
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
