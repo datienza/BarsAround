@@ -9,12 +9,13 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tide.barsaround.R
+import com.tide.barsaround.contracts.common.BaseListContract
 import com.tide.barsaround.ui.helper.AnimationHelper
 import com.tide.barsaround.utils.UiConstants
 import kotlinx.android.synthetic.main.fragment_base_list.*
 import javax.inject.Inject
 
-abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewHolder> : BaseFragment() {
+abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewHolder> : BaseFragment(), BaseListContract.BaseListView<J> {
 
     @Inject
     protected lateinit var adapter: A
@@ -44,7 +45,7 @@ abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewH
     }
 
     protected open fun getLayoutManager(): RecyclerView.LayoutManager {
-        return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        return LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     protected open fun getItemDecoration(): RecyclerView.ItemDecoration? {
@@ -55,20 +56,20 @@ abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewH
         }
     }
 
-    fun showProgressBar() {
+    override fun showProgressBar() {
         if (baseListProgressBar != null) {
             baseListProgressBar.alpha = UiConstants.ALPHA_OPAQUE
             baseListProgressBar.visibility = View.VISIBLE
         }
     }
 
-    fun hideProgressBar() {
+    override fun hideProgressBar() {
         if (baseListProgressBar != null && baseListProgressBar.visibility == View.VISIBLE) {
             AnimationHelper.animateView(baseListProgressBar, View.GONE, UiConstants.ALPHA_TRANSPARENT, resources.getInteger(android.R.integer.config_shortAnimTime))
         }
     }
 
-    fun populateList(data: List<J>) {
+    override fun populateList(data: List<J>) {
         if (baseListProgressBar != null && baseListRecyclerView.visibility != View.VISIBLE) {
             // The animation will be executed when the recyclerview is inflated, because it doesn't seem to visible randomly
             baseListRecyclerView.post {
@@ -82,7 +83,19 @@ abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewH
         adapter.notifyDataSetChanged()
     }
 
-    fun hideList() {
+    override fun hideList() {
         baseListRecyclerView.visibility = View.GONE
+    }
+
+    override fun hideSwipeRefreshingView() {
+        baseListSwipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun showEmptyResultView() {
+        baseListEmptyResultTextView.visibility = View.VISIBLE
+    }
+
+    override fun hideEmptyResultView() {
+        baseListEmptyResultTextView.visibility = View.GONE
     }
 }

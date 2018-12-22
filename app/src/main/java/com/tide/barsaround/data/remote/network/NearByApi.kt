@@ -9,6 +9,6 @@ private const val PLACES_API_KEY = "AIzaSyCe41lFznZNN-J1ku4f2nzRSyC7SDTw9N0"
 
 interface NearByApi {
 
-    @GET("nearbysearch/json?sensor=true&key=$PLACES_API_KEY")
-    fun getNearbyPlaces(@Query("type") type: String, @Query("location") location: String, @Query("radius") radius: Int): Single<NearByResponse>
+    @GET("nearbysearch/json?rankby=distance&key=$PLACES_API_KEY")
+    fun getNearbyPlaces(@Query("type") type: String, @Query("location") location: String): Single<NearByResponse>
 }

@@ -1,13 +1,12 @@
 package com.tide.barsaround.ui
 
-import com.tide.barsaround.ui.adapters.BarsAdapter
 import com.tide.barsaround.di.app.NAME_ANDROID_SCHEDULER_MAIN_THREAD
 import com.tide.barsaround.di.fragment.FragmentComponent
 import com.tide.barsaround.di.fragment.FragmentComponentBuilder
 import com.tide.barsaround.di.fragment.FragmentModule
 import com.tide.barsaround.di.fragment.FragmentScope
 import com.tide.barsaround.helpers.LocationTrackerImpl
-import com.tide.barsaround.presenters.BarsFragmentPresenter
+import com.tide.barsaround.presenters.MapFragmentPresenter
 import com.tide.barsaround.repository.NearbyRepository
 import dagger.Module
 import dagger.Provides
@@ -16,23 +15,20 @@ import io.reactivex.Scheduler
 import javax.inject.Named
 
 @FragmentScope
-@Subcomponent(modules = [BarsFragmentComponent.BarsFragmentModule::class])
-interface BarsFragmentComponent : FragmentComponent<BarsFragment> {
+@Subcomponent(modules = [MapFragmentComponent.MapsFragmentModule::class])
+interface MapFragmentComponent : FragmentComponent<MapFragment> {
 
     @Subcomponent.Builder
-    interface Builder : FragmentComponentBuilder<BarsFragmentModule, BarsFragmentComponent>
+    interface Builder : FragmentComponentBuilder<MapsFragmentModule, MapFragmentComponent>
 
     @Module
-    class BarsFragmentModule(fragment: BarsFragment) : FragmentModule<BarsFragment>(fragment) {
+    class MapsFragmentModule(fragment: MapFragment) : FragmentModule<MapFragment>(fragment) {
 
         @Provides
-        fun provideBarsFragmentPresenter(
+        fun provideMapsFragmentPresenter(
             nearbyRepository: NearbyRepository,
             @Named(NAME_ANDROID_SCHEDULER_MAIN_THREAD) uiScheduler: Scheduler,
             locationTrackerImpl: LocationTrackerImpl
-        ) = BarsFragmentPresenter(nearbyRepository, uiScheduler, locationTrackerImpl)
-
-        @Provides
-        fun provideBarsAdapter() = BarsAdapter(fragment.context!!)
+        ) = MapFragmentPresenter(nearbyRepository, uiScheduler, locationTrackerImpl)
     }
 }

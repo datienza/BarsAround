@@ -1,4 +1,4 @@
-package com.test.spacex.ui.adapter.products
+package com.tide.barsaround.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -29,12 +29,11 @@ class BarsAdapter(context: Context) : BaseAdapter<Result, BarsAdapter.BarViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarViewHolder {
         val view = layoutInflater.inflate(R.layout.item_bar, parent, false)
-        return BarsAdapter.BarViewHolder(view)
+        return BarViewHolder(view)
     }
 
     class BarViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(result: Result) {
-            val context = containerView.context
             barNameText.text = result.name
         }
     }

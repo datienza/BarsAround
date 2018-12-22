@@ -13,7 +13,8 @@ import javax.inject.Singleton
     RepositoryModule::class,
     RemoteDataModule::class,
     SchedulersModule::class,
-    ApiModule::class
+    ApiModule::class,
+    LocationModule::class
 ])
 interface AppComponent {
     fun inject(application: BarsAroundApplication): BarsAroundApplication

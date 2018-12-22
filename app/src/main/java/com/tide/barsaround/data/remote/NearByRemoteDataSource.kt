@@ -7,7 +7,7 @@ import io.reactivex.schedulers.Schedulers
 
 class NearByRemoteDataSource(private val retrofitApi: NearByApi) {
 
-    fun getNearByPlaces(type: String, location: String, radius: Int): Single<NearByResponse> =
-        retrofitApi.getNearbyPlaces(type, location, radius)
+    fun getNearByPlaces(type: String, location: String): Single<NearByResponse> =
+        retrofitApi.getNearbyPlaces(type, location)
             .subscribeOn(Schedulers.io())
 }

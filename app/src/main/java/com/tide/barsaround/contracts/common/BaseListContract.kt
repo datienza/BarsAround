@@ -10,15 +10,11 @@ interface BaseListContract {
 
         fun hideEmptyResultView()
 
-        fun showEmptySearchView()
-
-        fun hideEmptySearchView()
-
         fun showProgressBar()
 
         fun hideProgressBar()
 
-        fun populateList(var1: List<J>)
+        fun populateList(data: List<J>)
 
         fun hideList()
     }

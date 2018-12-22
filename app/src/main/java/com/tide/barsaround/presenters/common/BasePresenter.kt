@@ -8,13 +8,7 @@ abstract class BasePresenter<T : MvpView> : Presenter<T> {
 
     protected var mvpView: T? = null
 
-    protected var compositeDisposable: CompositeDisposable? = null
-
-    val isViewAttached: Boolean
-        get() = this.mvpView != null
-
-    val isDisposableReady: Boolean
-        get() = this.compositeDisposable != null
+    private var compositeDisposable: CompositeDisposable? = null
 
     override fun attachView(mvpView: T) {
         this.mvpView = mvpView
@@ -24,8 +18,12 @@ abstract class BasePresenter<T : MvpView> : Presenter<T> {
         mvpView = null
     }
 
+    private fun isDisposableReady() = compositeDisposable != null
+
+    private fun isViewAttached() = mvpView != null
+
     fun checkViewAttached() {
-        if (!isViewAttached) {
+        if (!isViewAttached()) {
             throw BasePresenter.MvpViewNotAttachedException()
         }
     }
@@ -39,7 +37,7 @@ abstract class BasePresenter<T : MvpView> : Presenter<T> {
         }
     }
 
-    fun destroyAllDisposables() {
+    open fun destroyAllDisposables() {
         if (compositeDisposable != null) {
             compositeDisposable?.dispose()
             compositeDisposable = null

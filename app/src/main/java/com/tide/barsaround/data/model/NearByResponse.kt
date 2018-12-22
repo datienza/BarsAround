@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class NearByResponse(
-    @Json(name = "flight_number") val results: List<Result>? = null
+    @Json(name = "results") val results: List<Result>? = null
 )
