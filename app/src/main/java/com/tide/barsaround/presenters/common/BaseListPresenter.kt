@@ -11,9 +11,7 @@ abstract class BaseListPresenter<D, T : BaseListContract.BaseListView<D>> : Base
         (mvpView as BaseListContract.BaseListView<D>).showProgressBar()
     }
 
-    abstract fun loadData(forceReload: Boolean)
-
-    fun loadDataForFilteredSearch(filteredSearch: String) {}
+    abstract fun loadData()
 
     fun hideSwipeRefreshingView(isSpinnerApplicable: Boolean) {
         if (isSpinnerApplicable) {

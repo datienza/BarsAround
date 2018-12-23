@@ -4,6 +4,8 @@ import android.location.Location
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.tide.barsaround.contracts.MapFragmentContract
+import com.tide.barsaround.helpers.LocationPermission
+import com.tide.barsaround.helpers.LocationPermissionImpl
 import com.tide.barsaround.helpers.LocationTracker
 import com.tide.barsaround.helpers.LocationTrackerImpl
 import com.tide.barsaround.presenters.common.BasePresenter
@@ -14,8 +16,11 @@ import io.reactivex.Scheduler
 class MapFragmentPresenter(
     private val nearByRepository: NearbyRepository,
     private val uiScheduler: Scheduler,
-    private val locationTrackerImpl: LocationTrackerImpl
-) : BasePresenter<MapFragmentContract.View>(), LocationTracker by locationTrackerImpl {
+    private val locationTrackerImpl: LocationTrackerImpl,
+    private val locationPermissionImpl: LocationPermissionImpl
+) : BasePresenter<MapFragmentContract.View>(),
+    LocationTracker by locationTrackerImpl,
+    LocationPermission by locationPermissionImpl {
 
     private var lastLocation: Location? = null
 
@@ -23,24 +28,25 @@ class MapFragmentPresenter(
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.locations.forEach { location ->
                 lastLocation = location
-                loadData(true)
+                loadData()
             }
         }
     }
 
-    fun init() {
+    fun loadMap() {
         startLocationUpdates(locationCallback)
     }
 
-    fun loadData(forceReload: Boolean) {
+    fun loadData() {
         lastLocation?.let { location ->
             val locationAttribute = location.latitude.toString() + "," + location.longitude.toString()
             addDisposable(
                 nearByRepository.getNearbyPlaces(BAR_TYPE, locationAttribute)
                     .observeOn(uiScheduler)
-                    .subscribe({
-                        it.results?.let { bars ->
-                            mvpView?.displayData(bars)
+                    .subscribe({ barsResponse ->
+                        barsResponse?.let { bars ->
+                            bars.forEach { it.setDistanceFromLocation(lastLocation) }
+                            mvpView?.displayData(location, bars)
                         }
                     }, {
                     })

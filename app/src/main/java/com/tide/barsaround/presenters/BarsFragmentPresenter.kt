@@ -4,7 +4,9 @@ import android.location.Location
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.tide.barsaround.contracts.BarsFragmentContract
-import com.tide.barsaround.data.model.Result
+import com.tide.barsaround.data.model.Bar
+import com.tide.barsaround.helpers.LocationPermission
+import com.tide.barsaround.helpers.LocationPermissionImpl
 import com.tide.barsaround.helpers.LocationTracker
 import com.tide.barsaround.helpers.LocationTrackerImpl
 import com.tide.barsaround.presenters.common.BaseListPresenter
@@ -15,8 +17,11 @@ import io.reactivex.Scheduler
 class BarsFragmentPresenter(
     private val nearByRepository: NearbyRepository,
     private val uiScheduler: Scheduler,
-    private val locationTrackerImpl: LocationTrackerImpl
-) : BaseListPresenter<Result, BarsFragmentContract.View>(), LocationTracker by locationTrackerImpl {
+    private val locationTrackerImpl: LocationTrackerImpl,
+    private val locationPermissionImpl: LocationPermissionImpl
+) : BaseListPresenter<Bar, BarsFragmentContract.View>(),
+    LocationTracker by locationTrackerImpl,
+    LocationPermission by locationPermissionImpl {
 
     private var lastLocation: Location? = null
 
@@ -24,27 +29,31 @@ class BarsFragmentPresenter(
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.locations.forEach { location ->
                 lastLocation = location
-                loadData(true)
+                loadData()
             }
         }
     }
 
-    fun init() {
+    fun loadList() {
         startLocationUpdates(locationCallback)
     }
 
-    override fun loadData(forceReload: Boolean) {
+    override fun loadData() {
         lastLocation?.let { location ->
+            showLoadingOnStart()
             val locationAttribute = location.latitude.toString() + "," + location.longitude.toString()
             addDisposable(
                 nearByRepository.getNearbyPlaces(BAR_TYPE, locationAttribute)
                     .observeOn(uiScheduler)
-                    .subscribe({
-                        it.results?.let { bars ->
+                    .subscribe({ barsResponse ->
+                        barsResponse?.let { bars ->
+                            bars.forEach { it.setDistanceFromLocation(lastLocation) }
                             displayData(bars)
+                            hideSwipeRefreshingView(true)
                         }
                     }, {
                         showEmptyResult()
+                        hideSwipeRefreshingView(true)
                     })
             )
         }

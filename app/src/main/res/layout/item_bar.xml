@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:padding="@dimen/margin_screen_edge">
 
     <TextView
             android:id="@+id/barNameText"
-            style="@style/Content1"
+            style="@style/Content1.Black"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            tools:text="Bar Manolo"/>
+
+    <TextView
+            android:id="@+id/distanceText"
+            style="@style/Content2.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2 km"/>
 
 </LinearLayout>

@@ -1,7 +1,7 @@
 package com.tide.barsaround.ui
 
-import com.tide.barsaround.data.model.Result
+import com.tide.barsaround.data.model.Bar
 
 interface OnBarSelectedListener {
-    fun onBarSelected(result: Result)
+    fun onBarSelected(bar: Bar)
 }

@@ -8,6 +8,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.tide.barsaround.R
 import com.tide.barsaround.contracts.common.BaseListContract
 import com.tide.barsaround.ui.helper.AnimationHelper
@@ -27,6 +28,7 @@ abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewH
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpList()
+        setUpSwipeToRefresh()
     }
 
     @LayoutRes
@@ -51,10 +53,22 @@ abstract class BaseListFragment<A : BaseAdapter<J, H>, J, H : RecyclerView.ViewH
     protected open fun getItemDecoration(): RecyclerView.ItemDecoration? {
         return context?.let {
             val verticalSpaceItemDecoration = SpacingItemDecoration(it)
-            verticalSpaceItemDecoration.setVerticalSpacing(R.dimen.grid_spacing_half)
+            verticalSpaceItemDecoration.setVerticalSpacing(R.dimen.vertical_spacing_item_decoration)
             verticalSpaceItemDecoration
         }
     }
+
+    protected open fun shouldIncludeSwipeToRefresh(): Boolean = true
+
+    protected open fun setUpSwipeToRefresh() {
+        if (shouldIncludeSwipeToRefresh()) {
+            baseListSwipeRefreshLayout.setOnRefreshListener(getRefreshListener())
+        } else {
+            baseListSwipeRefreshLayout?.isEnabled = false
+        }
+    }
+
+    abstract fun getRefreshListener(): SwipeRefreshLayout.OnRefreshListener
 
     override fun showProgressBar() {
         if (baseListProgressBar != null) {

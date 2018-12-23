@@ -16,16 +16,20 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Head">
-        <item name="android:textSize">@dimen/text_size_big</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="Content1">
         <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="Content1.Black">
+        <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
     <style name="Content2">
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
+
+    <style name="Content2.Black">
+        <item name="android:textColor">@color/textColorPrimary</item>
+    </style>
+
 </resources>

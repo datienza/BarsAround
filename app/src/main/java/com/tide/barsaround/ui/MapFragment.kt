@@ -1,7 +1,9 @@
 package com.tide.barsaround.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +16,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.tide.barsaround.R
 import com.tide.barsaround.contracts.MapFragmentContract
-import com.tide.barsaround.data.model.Result
+import com.tide.barsaround.data.model.Bar
 import com.tide.barsaround.di.fragment.HasFragmentSubcomponentBuilders
+import com.tide.barsaround.helpers.MY_PERMISSIONS_REQUEST_LOCATION
 import com.tide.barsaround.presenters.MapFragmentPresenter
 import com.tide.barsaround.ui.common.BaseFragment
 import kotlinx.android.synthetic.main.fragment_map.*
@@ -49,43 +52,35 @@ class MapFragment : BaseFragment(), MapFragmentContract.View, OnMapReadyCallback
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap
-        map?.mapType = GoogleMap.MAP_TYPE_NORMAL
-        map?.isMyLocationEnabled = true
-        presenter.init()
-    }
-
-    override fun displayData(bars: List<Result>) {
-        map?.clear()
-        bars.forEach {
-            val lat = it.geometry.location.lat
-            val lng = it.geometry.location.lng
-            val barName = it.name
-            val markerOptions = MarkerOptions()
-            val latLng = LatLng(lat, lng)
-            // Location of Marker on Map
-            markerOptions.position(latLng)
-            // Title for Marker
-            markerOptions.title(barName)
-            // Color or drawable for marker
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-            // add marker
-            map?.addMarker(markerOptions)
-            // move map camera
-            map?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-            map?.animateCamera(CameraUpdateFactory.zoomTo(13F))
+        map?.let { it ->
+            it.mapType = GoogleMap.MAP_TYPE_NORMAL
+            it.isMyLocationEnabled = true
+            it.setOnMyLocationButtonClickListener {
+                presenter.loadMap()
+                true
+            }
+            presenter.loadMap()
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        presenter.destroyAllDisposables()
-        mapView.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
-        mapView.onDestroy()
+    override fun displayData(currentLocation: Location, bars: List<Bar>) {
+        map?.let {
+            it.clear()
+            bars.forEach { bar ->
+                val lat = bar.lat
+                val lng = bar.lng
+                val latLng = LatLng(lat, lng)
+                val markerOptions = MarkerOptions().apply {
+                    position(latLng)
+                    title(bar.name)
+                    snippet(bar.distance)
+                    icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                }
+                it.addMarker(markerOptions)
+            }
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(currentLocation.latitude, currentLocation.longitude), 15F)
+            it.animateCamera(cameraUpdate)
+        }
     }
 
     override fun onResume() {
@@ -93,9 +88,21 @@ class MapFragment : BaseFragment(), MapFragmentContract.View, OnMapReadyCallback
         mapView.onResume()
     }
 
+    override fun onPause() {
+        super.onPause()
+        presenter.destroyAllDisposables()
+        mapView?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
+        mapView?.onDestroy()
+    }
+
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        mapView?.onLowMemory()
     }
 
     override fun injectMembers(hasFragmentSubcomponentBuilders: HasFragmentSubcomponentBuilders) {
@@ -117,7 +124,18 @@ class MapFragment : BaseFragment(), MapFragmentContract.View, OnMapReadyCallback
         }
     }
 
-    override fun locationPermissionGranted() {
-        presenter.init()
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun requestLocationPermission() =
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            MY_PERMISSIONS_REQUEST_LOCATION
+        )
+
+    override fun onLocationPermissionGranted() {
+        presenter.loadMap()
     }
 }
