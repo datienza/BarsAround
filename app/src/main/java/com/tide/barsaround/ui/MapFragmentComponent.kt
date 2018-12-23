@@ -1,6 +1,6 @@
 package com.tide.barsaround.ui
 
-import android.content.Context
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.tide.barsaround.di.app.NAME_ANDROID_SCHEDULER_MAIN_THREAD
 import com.tide.barsaround.di.fragment.FragmentComponent
@@ -32,11 +32,11 @@ interface MapFragmentComponent : FragmentComponent<MapFragment> {
 
         @Provides
         fun providesLocationTrackerImpl(
-            context: Context,
+            fusedLocationProviderClient: FusedLocationProviderClient,
             locationRequest: LocationRequest,
             locationPermissionImpl: LocationPermissionImpl
         ) =
-            LocationTrackerImpl(context, locationRequest, locationPermissionImpl)
+            LocationTrackerImpl(fusedLocationProviderClient, locationRequest, locationPermissionImpl)
 
         @Provides
         fun provideMapsFragmentPresenter(

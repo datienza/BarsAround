@@ -23,7 +23,7 @@ class BarsFragmentPresenter(
     LocationTracker by locationTrackerImpl,
     LocationPermission by locationPermissionImpl {
 
-    private var lastLocation: Location? = null
+    internal var lastLocation: Location? = null
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
@@ -47,7 +47,7 @@ class BarsFragmentPresenter(
                     .observeOn(uiScheduler)
                     .subscribe({ barsResponse ->
                         barsResponse?.let { bars ->
-                            bars.forEach { it.setDistanceFromLocation(lastLocation) }
+                            bars.forEach { it.setDistanceFromLocation(location) }
                             displayData(bars)
                             hideSwipeRefreshingView(true)
                         }

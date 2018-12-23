@@ -5,7 +5,7 @@ import com.tide.barsaround.presenters.common.BasePresenter
 
 class MainActivityPresenter : BasePresenter<MainActivityContract.View>() {
 
-    private var lastSelectedItemId: Int = 0
+    internal var lastSelectedItemId: Int = 0
 
     fun navigationItemSelected(itemId: Int): Boolean {
         mvpView?.let { view ->

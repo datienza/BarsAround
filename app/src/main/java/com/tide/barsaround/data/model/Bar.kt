@@ -16,13 +16,11 @@ class Bar() {
         lat = result.geometry.location.lat
     }
 
-    fun setDistanceFromLocation(location: Location?) {
-        location?.let {
-            val barLocation = Location("").apply {
-                latitude = this@Bar.lat
-                longitude = this@Bar.lng
-            }
-            distance = calculateDistanceBtwPoints(it, barLocation)
+    fun setDistanceFromLocation(location: Location) {
+        val barLocation = Location("").apply {
+            latitude = this@Bar.lat
+            longitude = this@Bar.lng
         }
+        distance = calculateDistanceBtwPoints(location, barLocation)
     }
 }

@@ -18,9 +18,9 @@ abstract class BasePresenter<T : MvpView> : Presenter<T> {
         mvpView = null
     }
 
-    private fun isDisposableReady() = compositeDisposable != null
+    internal fun isDisposableReady() = compositeDisposable != null
 
-    private fun isViewAttached() = mvpView != null
+    internal fun isViewAttached() = mvpView != null
 
     fun checkViewAttached() {
         if (!isViewAttached()) {
